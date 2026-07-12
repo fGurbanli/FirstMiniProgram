@@ -252,7 +252,7 @@ void SumOfNumbers()
         printf("Enter a number %d / %d\n", i,count);
         int temp = GetIntInput();
         totalSum += temp;
-        if (i < totalSum)
+        if (i < count)
         {
             printf("Subtotal is %d\n", totalSum);
         }
