@@ -15,10 +15,31 @@ void SumOfNumbers();
 //Functions
 int GetPosIntInput();
 int GetIntInput();
+float GetPositiveFloat();
 float GetFloatInput();
 int AskUserOut();
 
+//Electricity Price Calculator
+/* Power ratings for bulbs in watts */
+#define POWER_LED 9
+#define POWER_INCANDESCENT 60
 
+/* Number of days for calculation */
+#define DAYS_PER_MONTH 30
+
+/* Value added tax in percentages */
+#define VAT_PERCENTAGE 24.0f
+
+/* FILL IN! Something you buy regularly */
+#define ITEM_NAME "Bulb"
+#define ITEM_COST 2.01f
+
+void ElectricityPriceCal();
+float ConvertMwhToKwh(float pricePerMwh);
+float CalcElectricityCost(int consumptionInWatts, float pricePerKwh);
+float CalcVat(float price, float vatPcnt);
+int CalcMonthlyConsumption(int nConsumers, int nHours, int power, int days);
+int CalcItemsForMoney(float money, float costPerItem);
 
 
 
@@ -74,6 +95,10 @@ void MainMenu()
         case 4:
             printf("Sum of Numbers is starting..\n\n");
             SumOfNumbers();
+            break;
+        case 5:
+            printf("Electricty Price Calculator is starting..\n\n");
+            ElectricityPriceCal();
             break;
         default:
             printf("Unknown option!\n");
@@ -206,11 +231,68 @@ void SumOfNumbers()
     }
 }
 
+void ElectricityPriceCal()
+{
+    printf("Enter the market price for electricity in MWh: ");
+    float pricePerMwh = GetPositiveFloat();
+
+    /* Convert from MWh to kWh for easier underastanding */
+    float pricePerKwh = ConvertMwhToKwh(pricePerMwh);
+
+    /* Calculate VAT and price of kWh with VAT */
+    float vatPerKwh = CalcVat(pricePerKwh, VAT_PERCENTAGE);
+    float priceWithVat = pricePerKwh + vatPerKwh;
+
+    printf("\nMarket cost of electricity is %.2f EUR / MWh.\n", pricePerMwh);
+    printf("This is %.4f EUR per kWh before taxes.\n", pricePerKwh);
+    printf("The government takes %.4f EUR in taxes.\n", vatPerKwh);
+    printf("With taxes, the cost for you is %.4f EUR / kWh\n\n", priceWithVat);
 
 
+    printf("Lets do a rough savings estimate when switching "
+           "from incandescent bulbs to LEDs\n\n");
+
+    printf("Number of E27 lightbulbs in use: ");
+    int numOfBulbs = GetPosIntInput();
+
+    printf("Average hours per day the bulbs are turned on for: ");
+    int hoursPerBulb = GetPosIntInput();
+
+    /* Calculate avg monthly consumption for LED and incandescent bulbs */
+    int consIncandescent = CalcMonthlyConsumption(numOfBulbs, hoursPerBulb,
+                                                  POWER_INCANDESCENT,
+                                                  DAYS_PER_MONTH);
+    int consLED = CalcMonthlyConsumption(numOfBulbs, hoursPerBulb, POWER_LED,
+                                         DAYS_PER_MONTH);
+
+    /* Calculate the cost for the consumed energy for both bulb types */
+    float costIncandescent = CalcElectricityCost(consIncandescent, priceWithVat);
+    float costLED = CalcElectricityCost(consLED, priceWithVat);
+
+    printf("\nResults are calculated for a %d-day month.\n", DAYS_PER_MONTH);
+    printf("\nUsing %d W incandescent bulbs consumes %d W, costing %.2f EUR\n",
+           POWER_INCANDESCENT, consIncandescent, costIncandescent);
+    printf("Using %d W LED bulbs consumes %d W, costing %.2f EUR\n",
+           POWER_LED, consLED, costLED);
+
+    float potentialSavings = costIncandescent - costLED;
+    int purchasableItems = CalcItemsForMoney(potentialSavings, ITEM_COST);
+
+    printf("That's a saving of %.2f EUR.\n", potentialSavings);
+    printf("At the price of %.2f, you could buy %d %s with that money!",
+            ITEM_COST, purchasableItems, ITEM_NAME);
+    if (AskUserOut() == 1)
+    {
+        ElectricityPriceCal();
+    }
+}
+
+
+
+//Functions
 int AskUserOut()
 {
-    printf("\nDo you want to continue?\n");
+    printf("\n\nDo you want to continue?\n");
     printf("1 - Continue\n");
     printf("0 - Back to main menu\n");
 
@@ -273,4 +355,51 @@ float GetFloatInput()
         while (getchar() != '\n');
     }
     return input;
+}
+
+float GetPositiveFloat()
+{
+    float input;
+    while (1)
+    {
+        if (scanf("%f", &input) != 1)
+        {
+            printf("Please enter a valid number: \n");
+            while (getchar() != '\n');
+            continue;
+        }
+
+        if (input > 0)
+        {
+            return input;
+        }
+        printf("Please enter a positive number: \n");
+    }
+}
+
+//Electricty Price Calculator functions
+float ConvertMwhToKwh(float price)
+{
+    return price / 1000.0f;
+}
+float CalcElectricityCost(int consumptionInWatts, float pricePerKwh)
+{
+
+    return consumptionInWatts * pricePerKwh / 1000.0f;
+}
+float CalcVat(float price, float vatPcnt)
+{
+
+    return price * vatPcnt / 100;
+}
+int CalcMonthlyConsumption(int nConsumers, int nHours, int power, int days)
+{
+    int consumption;
+    consumption = nConsumers * nHours * power * days;
+    return consumption;
+}
+int CalcItemsForMoney(float money, float costPerItem)
+{
+
+    return money / costPerItem;
 }
