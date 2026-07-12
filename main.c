@@ -13,6 +13,7 @@ void CashRegister();
 void SumOfNumbers();
 void ElectricityPriceCal();
 void MarioTower();
+void SequenceGenerator();
 
 //Functions
 int GetPosIntInput();
@@ -45,6 +46,20 @@ int CalcItemsForMoney(float money, float costPerItem);
 //Mario Tower
 void printBlocks(int height);
 
+//Sequence Generator
+#define WIDTH 65
+/* Functions for visuals */
+void PrintSeparator(int width);
+void PrintMenu(int width);
+void PrintAsciiWelcomeMsg(void);
+
+/* Functions to handle arithmetic sequence */
+void ArithmeticSequence(void);
+void ArithmeticSequenceGenerator(float start, float diff, int cnt);
+
+/* Functions to handle geometric sequence */
+void GeometricSequence(void);
+void GeometricSequenceGenerator(float start, float ratio, int cnt);
 
 
 int main(void) {
@@ -77,8 +92,7 @@ void MainMenu()
     printf("8 - Finding Extreme Values\n");
     printf("\n0 - Exit\n");
 
-    int option;
-    scanf("%d", &option);
+    int option = GetPosIntInput();
 
     switch (option) {
         case 0:
@@ -107,6 +121,10 @@ void MainMenu()
         case 6:
             printf("Mario Tower is starting..\n\n");
             MarioTower();
+            break;
+        case 7:
+            printf("Sequence Generator is starting..\n\n");
+            SequenceGenerator();
             break;
         default:
             printf("Unknown option!\n");
@@ -310,6 +328,37 @@ void MarioTower()
     }
 }
 
+void SequenceGenerator()
+{
+    PrintAsciiWelcomeMsg();
+    PrintSeparator(WIDTH);
+
+    PrintMenu(WIDTH);
+
+    PrintSeparator(WIDTH);
+
+    printf("Enter selection\n> ");
+    int option = GetPosIntInput();
+    PrintSeparator(WIDTH);
+
+    /* Process the user action */
+    switch (option)
+    {
+        case 1:
+            ArithmeticSequence();
+            break;
+        case 2:
+            GeometricSequence();
+            break;
+        default:
+            printf("Unknown option!\n");
+    }
+    printf("\n");
+    PrintSeparator(WIDTH);
+
+
+}
+
 
 //Functions
 int AskUserOut()
@@ -325,7 +374,7 @@ int AskUserOut()
             printf("\nGoing back to main menu..");
             MainMenu();
         case 1:
-            printf("\nCircle Area Calculator starting..\n\n");
+            printf("\nProgram is starting again..\n\n");
             return 1;
         default:
             printf("Unknown option!\n");
@@ -446,4 +495,107 @@ void printBlocks(int height)
         total += i;
         printf("%d\t\t%d\n", i, total);
     }
+}
+
+//Sequence Generator
+void ArithmeticSequence(void)
+{
+
+    /* Header for this generation */
+    printf("Arithmetic sequence generator\n");
+    PrintSeparator(WIDTH);
+
+    /* Get user input for the generator parameters */
+    printf("Enter number of results: ");
+    int resultCount = GetPosIntInput();
+    printf("Enter starting value: ");
+    float startingValue = GetFloatInput();
+    printf("Enter common difference: ");
+    float cmnDiff = GetFloatInput();
+    /* Call the generator with user specified parameters */
+    ArithmeticSequenceGenerator(startingValue, cmnDiff, resultCount);
+}
+
+void GeometricSequence(void)
+{
+    /* Header for this generation */
+    printf("Geometric sequence generator\n");
+    PrintSeparator(WIDTH);
+
+    /* Get user input for the generator parameters */
+    printf("Enter number of results: ");
+    int resultCount = GetPosIntInput();
+    printf("Enter starting value: ");
+    float startingValue = GetFloatInput();
+    printf("Enter common difference: ");
+    float cmnRatio = GetFloatInput();
+
+    /* Call the generator with user specified parameters */
+    GeometricSequenceGenerator(startingValue, cmnRatio, resultCount);
+
+}
+
+void ArithmeticSequenceGenerator(float start, float diff, int cnt)
+{
+    printf("Results\n");
+    for(int i = 1; i <= cnt; i++)
+    {
+        printf(" %.2f", start);
+        start += diff;
+    }
+    if (AskUserOut() == 1){
+        SequenceGenerator();
+    }
+}
+
+void GeometricSequenceGenerator(float start, float ratio, int cnt)
+{
+    printf("Results\n");
+
+    for (int i = 1; i <= cnt; i++)
+    {
+        printf(" %.2f", start);
+        start *= ratio;
+    }
+    if (AskUserOut() == 1){
+        SequenceGenerator();
+    }
+
+}
+
+void PrintAsciiWelcomeMsg(void)
+{
+    /* TODO: add ASCII art */
+    printf("   _____                           _             _             \n"
+       "  / ____|                         | |           | |            \n"
+       " | |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __| |_ ___ _ __  \n"
+       " | | |_ |/ _ \\ '_ \\ / _ \\ '__/ _` | __/ _ \\| '__| __/ _ \\ '__| \n"
+       " | |__| |  __/ | | |  __/ | | (_| | || (_) | |  | ||  __/ |    \n"
+       "  \\_____|\\___|_| |_|\\___|_|  \\__,_|\\__\\___/|_|   \\__\\___|_|    \n"
+       "                                                               \n");
+}
+
+void PrintMenu(int width)
+{
+    const int paddingLeft = 3;
+    const int paddingRight = 2;
+
+    /* Calculate area for a menu line text*/
+    int textArea = width - (paddingLeft + paddingRight);
+
+    /* Format: align left, give room up to 'textArea' characters, cut off
+     *         anything that doesn't fit.
+     */
+    printf("#  %-*.*s #\n", textArea, textArea, "1 - Arithmetic sequence generator");
+    printf("#  %-*.*s #\n", textArea, textArea, "2 - Geometric sequence generator");
+    printf("#  %-*.*s #\n", textArea, textArea, "0 - exit");
+}
+
+void PrintSeparator(int width)
+{
+    for (int i = 1; i <= width; i++)
+    {
+        printf("#");
+    }
+    printf("\n");
 }
