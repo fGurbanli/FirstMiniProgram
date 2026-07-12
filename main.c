@@ -14,8 +14,9 @@ void SumOfNumbers();
 void ElectricityPriceCal();
 void MarioTower();
 void SequenceGenerator();
+void ExtremeValuesInMatrix();
 
-//Functions
+//Global Functions
 int GetPosIntInput();
 int GetIntInput();
 float GetPositiveFloat();
@@ -60,6 +61,12 @@ void ArithmeticSequenceGenerator(float start, float diff, int cnt);
 /* Functions to handle geometric sequence */
 void GeometricSequence(void);
 void GeometricSequenceGenerator(float start, float ratio, int cnt);
+
+//Extreme Values In Matrix
+float AvgCal(int row, int column, int matrix [row][column]);
+int MaxVal(int row, int column, int matrix [row][column]);
+int MinVal(int row, int column, int matrix [row][column]);
+
 
 
 int main(void) {
@@ -125,6 +132,10 @@ void MainMenu()
         case 7:
             printf("Sequence Generator is starting..\n\n");
             SequenceGenerator();
+            break;
+        case 8:
+            printf("Extreme Values in Matrix is starting..\n\n");
+            ExtremeValuesInMatrix();
             break;
         default:
             printf("Unknown option!\n");
@@ -359,8 +370,43 @@ void SequenceGenerator()
 
 }
 
+void ExtremeValuesInMatrix()
+{
+    printf("Enter a valid value for row count: ");
+    int row = GetIntInput();
+    printf("Enter a valid value for column count: ");
+    int column = GetIntInput();
+    int matrix [row] [column];
 
-//Functions
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            printf("Give value for [%d] [%d]: ", i, j ); //Giving value for each box
+
+            matrix [i] [j] = GetIntInput();
+
+        }
+    }
+    printf("Here is your matrix!\n");
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            printf("%d ", matrix [i] [j]); //Printing matrix
+        }
+        printf("\n");
+    }
+    printf("Average value of matrix is: %.2f\n", AvgCal(row, column, matrix));
+    printf("Maximum value of matrix is value is: %d\n", MaxVal(row, column, matrix));
+    printf("Minimum value of matrix is value is: %d\n", MinVal(row, column, matrix));
+    if (AskUserOut() == 1){
+        SumOfNumbers();
+    }
+}
+
+
+//Global Functions
 int AskUserOut()
 {
     printf("\n\nDo you want to continue?\n");
@@ -382,7 +428,6 @@ int AskUserOut()
     }
     return 0;
 }
-
 int GetPosIntInput()
 {
     int input;
@@ -397,7 +442,6 @@ int GetPosIntInput()
     }
     return input;
 }
-
 int GetIntInput()
 {
     int input;
@@ -412,7 +456,6 @@ int GetIntInput()
     }
     return input;
 }
-
 float GetFloatInput()
 {
     float input;
@@ -427,7 +470,6 @@ float GetFloatInput()
     }
     return input;
 }
-
 float GetPositiveFloat()
 {
     float input;
@@ -515,7 +557,6 @@ void ArithmeticSequence(void)
     /* Call the generator with user specified parameters */
     ArithmeticSequenceGenerator(startingValue, cmnDiff, resultCount);
 }
-
 void GeometricSequence(void)
 {
     /* Header for this generation */
@@ -534,7 +575,6 @@ void GeometricSequence(void)
     GeometricSequenceGenerator(startingValue, cmnRatio, resultCount);
 
 }
-
 void ArithmeticSequenceGenerator(float start, float diff, int cnt)
 {
     printf("Results\n");
@@ -547,7 +587,6 @@ void ArithmeticSequenceGenerator(float start, float diff, int cnt)
         SequenceGenerator();
     }
 }
-
 void GeometricSequenceGenerator(float start, float ratio, int cnt)
 {
     printf("Results\n");
@@ -562,7 +601,6 @@ void GeometricSequenceGenerator(float start, float ratio, int cnt)
     }
 
 }
-
 void PrintAsciiWelcomeMsg(void)
 {
     /* TODO: add ASCII art */
@@ -574,7 +612,6 @@ void PrintAsciiWelcomeMsg(void)
        "  \\_____|\\___|_| |_|\\___|_|  \\__,_|\\__\\___/|_|   \\__\\___|_|    \n"
        "                                                               \n");
 }
-
 void PrintMenu(int width)
 {
     const int paddingLeft = 3;
@@ -590,7 +627,6 @@ void PrintMenu(int width)
     printf("#  %-*.*s #\n", textArea, textArea, "2 - Geometric sequence generator");
     printf("#  %-*.*s #\n", textArea, textArea, "0 - exit");
 }
-
 void PrintSeparator(int width)
 {
     for (int i = 1; i <= width; i++)
@@ -598,4 +634,52 @@ void PrintSeparator(int width)
         printf("#");
     }
     printf("\n");
+}
+
+//Extreme Values In Matrix
+float AvgCal(int row, int column, int matrix [row][column])
+{
+    float sum = 0;
+    float count = 0;
+    float avg;
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            sum += matrix [i] [j];
+            count++;
+        }
+    }
+    avg = sum / count;
+    return avg;
+}
+int MaxVal(int row, int column, int matrix [row][column])
+{
+    int maxVal = matrix [0] [0];
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            if (matrix [i] [j] > maxVal)
+            {
+                maxVal = matrix [i] [j];
+            }
+        }
+    }
+    return maxVal;
+}
+int MinVal(int row, int column, int matrix [row][column])
+{
+    int minVal = matrix [0] [0];
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            if (matrix [i] [j] < minVal)
+            {
+                minVal = matrix [i] [j];
+            }
+        }
+    }
+    return minVal;
 }
