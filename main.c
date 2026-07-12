@@ -8,6 +8,7 @@ void MainMenu();
 
 //Programs
 void MultiTable();
+void CircleAreaCal();
 
 //Functions
 int GetPosIntInput();
@@ -54,8 +55,12 @@ void MainMenu()
             printf("Shutting down the program...");
             exit(0);
         case 1:
-            printf("Multiplication Table starting..\n\n");
+            printf("Multiplication Table is starting..\n\n");
             MultiTable();
+            break;
+        case 2:
+            printf("Circle Area Calculator is starting..\n\n");
+            CircleAreaCal();
             break;
         default:
             printf("Unknown option!\n");
@@ -88,6 +93,36 @@ void MultiTable()
         case 1:
             printf("\nMultiplication Table starting..\n\n");
             MultiTable();
+            break;
+        default:
+            printf("Unknown option!\n");
+    }
+}
+
+void CircleAreaCal()
+{
+    double Pi = 3.14159265358979323846;
+    printf("Enter the radius of the circle: ");
+    double radius = GetPosIntInput();
+    double area = Pi * radius * radius;
+    double perimeter = 2 * Pi * radius;
+    printf("The area of the circle is %.2f\n", area);
+    printf("The perimeter of the circle is %.2f\n", perimeter);
+
+    printf("\nDo you want to continue?\n");
+    printf("1 - Continue\n");
+    printf("0 - Back to main menu\n");
+
+    int option;
+    scanf("%d", &option);
+
+    switch (option) {
+        case 0:
+            printf("\nGoing back to main menu..");
+            return;
+        case 1:
+            printf("\nCircle Area Calculator starting..\n\n");
+            CircleAreaCal();
             break;
         default:
             printf("Unknown option!\n");
