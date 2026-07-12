@@ -74,8 +74,6 @@ int main(void) {
     {
         MainMenu();
     }
-    MainMenu();
-    return 0;
 }
 
 void MainMenu()
@@ -163,7 +161,7 @@ void CircleAreaCal()
 {
     double Pi = 3.14159265358979323846;
     printf("Enter the radius of the circle: ");
-    double radius = GetPosIntInput();
+    double radius = GetFloatInput();
     double area = Pi * radius * radius;
     double perimeter = 2 * Pi * radius;
     printf("The area of the circle is %.2f\n", area);
@@ -243,15 +241,16 @@ void CashRegister()
 void SumOfNumbers()
 {
     printf("Enter how many numbers do you want to insert.\n");
-    int totalSum = GetPosIntInput();
-    printf("This program will take %d numbers from user and calculate sum of these numbers\n", totalSum);
+    int count = GetPosIntInput();
+    int totalSum = 0;
+    printf("This program will take %d numbers from user and calculate sum of these numbers\n", count);
 
-    for (int i = 1; i <= totalSum; i++)
+    for (int i = 1; i <= count; i++)
     {
         //Creating a temporary variable which helps to calculate current totalSum
-        int temp;
-        printf("Enter a number %d / 5\n", i);
-        scanf("%d", &temp);
+
+        printf("Enter a number %d / %d\n", i,count);
+        int temp = GetIntInput();
         totalSum += temp;
         if (i < totalSum)
         {
@@ -401,7 +400,7 @@ void ExtremeValuesInMatrix()
     printf("Maximum value of matrix is value is: %d\n", MaxVal(row, column, matrix));
     printf("Minimum value of matrix is value is: %d\n", MinVal(row, column, matrix));
     if (AskUserOut() == 1){
-        SumOfNumbers();
+        ExtremeValuesInMatrix();
     }
 }
 
@@ -419,6 +418,7 @@ int AskUserOut()
         case 0:
             printf("\nGoing back to main menu..");
             MainMenu();
+            break;
         case 1:
             printf("\nProgram is starting again..\n\n");
             return 1;
