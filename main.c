@@ -11,6 +11,8 @@ void MultiTable();
 void CircleAreaCal();
 void CashRegister();
 void SumOfNumbers();
+void ElectricityPriceCal();
+void MarioTower();
 
 //Functions
 int GetPosIntInput();
@@ -34,12 +36,14 @@ int AskUserOut();
 #define ITEM_NAME "Bulb"
 #define ITEM_COST 2.01f
 
-void ElectricityPriceCal();
 float ConvertMwhToKwh(float pricePerMwh);
 float CalcElectricityCost(int consumptionInWatts, float pricePerKwh);
 float CalcVat(float price, float vatPcnt);
 int CalcMonthlyConsumption(int nConsumers, int nHours, int power, int days);
 int CalcItemsForMoney(float money, float costPerItem);
+
+//Mario Tower
+void printBlocks(int height);
 
 
 
@@ -99,6 +103,10 @@ void MainMenu()
         case 5:
             printf("Electricty Price Calculator is starting..\n\n");
             ElectricityPriceCal();
+            break;
+        case 6:
+            printf("Mario Tower is starting..\n\n");
+            MarioTower();
             break;
         default:
             printf("Unknown option!\n");
@@ -287,6 +295,20 @@ void ElectricityPriceCal()
     }
 }
 
+void MarioTower()
+{
+    printf("\nPlease enter tower height: ");
+    int height = GetPosIntInput();
+    const char head[] = "\\O/";
+    const char body[] = " | ";
+    const char legs[] = "/ \\";
+    // Printing stickman
+    printf("%s\n%s\n%s\t\t\t\trow\t\ttotal\n", head, body, legs);
+    printBlocks(height);
+    if (AskUserOut() == 1){
+        MarioTower();
+    }
+}
 
 
 //Functions
@@ -402,4 +424,26 @@ int CalcItemsForMoney(float money, float costPerItem)
 {
 
     return money / costPerItem;
+}
+
+//Mario Tower function
+void printBlocks(int height)
+{
+    int total = 0;
+    for (int i = 3; i <= height; i++)
+    {
+        //Printing blocks
+        for (int blockCount = 1; blockCount <= i; blockCount++)
+        {
+            printf("#");
+        }
+        //Printing spaces
+        for (int spaceCount = 0; spaceCount <= height - i; spaceCount++)
+        {
+            printf(" ");
+        }
+        //Printing row and total at the end
+        total += i;
+        printf("%d\t\t%d\n", i, total);
+    }
 }
