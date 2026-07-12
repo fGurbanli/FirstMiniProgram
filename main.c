@@ -9,11 +9,16 @@ void MainMenu();
 //Programs
 void MultiTable();
 void CircleAreaCal();
+void CashRegister();
+void SumOfNumbers();
 
 //Functions
 int GetPosIntInput();
 int GetIntInput();
 float GetFloatInput();
+int AskUserOut();
+
+
 
 
 
@@ -62,6 +67,14 @@ void MainMenu()
             printf("Circle Area Calculator is starting..\n\n");
             CircleAreaCal();
             break;
+        case 3:
+            printf("Cash Register is starting..\n\n");
+            CashRegister();
+            break;
+        case 4:
+            printf("Sum of Numbers is starting..\n\n");
+            SumOfNumbers();
+            break;
         default:
             printf("Unknown option!\n");
     }
@@ -79,23 +92,8 @@ void MultiTable()
         int result = multiplier * i;
         printf("%d * %d = %d\n", multiplier, i, result);
     }
-    printf("Do you want to continue?\n");
-    printf("1 - Continue\n");
-    printf("0 - Back to main menu\n");
-
-    int option;
-    scanf("%d", &option);
-
-    switch (option) {
-        case 0:
-            printf("\nGoing back to main menu..");
-            return;
-        case 1:
-            printf("\nMultiplication Table starting..\n\n");
-            MultiTable();
-            break;
-        default:
-            printf("Unknown option!\n");
+    if (AskUserOut() == 1) {
+        MultiTable();
     }
 }
 
@@ -109,24 +107,127 @@ void CircleAreaCal()
     printf("The area of the circle is %.2f\n", area);
     printf("The perimeter of the circle is %.2f\n", perimeter);
 
+    if (AskUserOut() == 1){
+        CircleAreaCal();
+    }
+}
+
+void CashRegister()
+{
+    float accountBalance = 100.00f;         // Current account balance
+    const int pinCodeDebitCard = 1234;      // PIN of the card
+
+
+    /* Read the purchase total. */
+
+    printf("Enter purchase total: ");
+    float purchaseTotal = GetFloatInput();
+
+    /* Read whether the client presented their loyalty card */
+
+    printf("Did client present loyalty card?\n1 - yes\n0 - no\n");
+    int isLoyaltyCardPresented = GetIntInput();
+
+    /* Read whether the client will get an extra discount */
+
+    printf("Apply extra discount?\n1 - yes\n0 - no\n");
+    int applyExtraDiscount = GetIntInput();
+
+
+    if (applyExtraDiscount)
+    {
+        // Reduce the price by 20%
+        purchaseTotal *= 0.8f;
+        printf("20%% discount applied\n");
+    }
+    else if (isLoyaltyCardPresented)
+    {
+        // Reduce price by 10%
+        purchaseTotal *= 0.9f;
+        printf("10%% discount applied\n");
+    }
+
+    printf("Invoice total: %.2f\n", purchaseTotal);
+
+    // Ask the user for their PIN code
+
+    printf("Please enter your PIN code:");
+    int userEnteredPinCode = GetIntInput();
+
+
+    if (userEnteredPinCode == pinCodeDebitCard)
+    {
+        if (accountBalance >= purchaseTotal)
+        {
+            accountBalance -= purchaseTotal;
+            printf("Payment succeeded!\nYour current balance is %.2f\n", accountBalance);
+        }
+        else
+        {
+            printf("Insufficient balance!\n");
+            return;
+        }
+    }
+    else
+    {
+        printf("Your pin code is incorrect!");
+        return;
+    }
+    if (AskUserOut() == 1) {
+        CashRegister();
+    }
+}
+
+void SumOfNumbers()
+{
+    printf("Enter how many numbers do you want to insert.\n");
+    int totalSum = GetPosIntInput();
+    printf("This program will take %d numbers from user and calculate sum of these numbers\n", totalSum);
+
+    for (int i = 1; i <= totalSum; i++)
+    {
+        //Creating a temporary variable which helps to calculate current totalSum
+        int temp;
+        printf("Enter a number %d / 5\n", i);
+        scanf("%d", &temp);
+        totalSum += temp;
+        if (i < totalSum)
+        {
+            printf("Subtotal is %d\n", totalSum);
+        }
+        //The last output
+        else
+        {
+            printf("The final sum is %d", totalSum);
+        }
+    }
+    if (AskUserOut() == 1){
+        SumOfNumbers();
+    }
+}
+
+
+
+int AskUserOut()
+{
     printf("\nDo you want to continue?\n");
     printf("1 - Continue\n");
     printf("0 - Back to main menu\n");
 
-    int option;
-    scanf("%d", &option);
+    int option = GetPosIntInput();
 
     switch (option) {
         case 0:
             printf("\nGoing back to main menu..");
-            return;
+            MainMenu();
         case 1:
             printf("\nCircle Area Calculator starting..\n\n");
-            CircleAreaCal();
-            break;
+            return 1;
         default:
             printf("Unknown option!\n");
+            MainMenu();
     }
+    return 0;
 }
 
 int GetPosIntInput()
@@ -134,7 +235,7 @@ int GetPosIntInput()
     int input;
     while (1)
     {
-        if (scanf("%d", &input) == 1 && input > 0)
+        if (scanf("%d", &input) == 1 && input >= 0)
         {
             break;
         }
